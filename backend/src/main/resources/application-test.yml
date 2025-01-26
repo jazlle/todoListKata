@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/todolistdb_test
+    username: kataolympp
+    password: natixis
+    driver-class-name: org.postgresql.Driver
+  jooq:
+    sql-dialect: POSTGRES
+  sql:
+    init:
+      mode: always
