@@ -26,6 +26,10 @@ public class TodoListItemController {
         return todoListItemService.getAllTodoListItems();
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public TodoListItem getTodoListItemById(@PathVariable("id") Long id) { return todoListItemService.getTodoListItemById(id);}
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TodoListItem createTodoListItem(@RequestBody TodoListItemInDto todoListItemInDto) {
@@ -36,14 +40,15 @@ public class TodoListItemController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TodoListItem updateTodoListItem(@PathVariable("id") Long id, @RequestBody TodoListItemInDto todoListItemInDto) {
-        TodoListItem todoListItemToUpdate = todoListItemMapper.toDomain(todoListItemInDto);
-        return todoListItemService.updateTodoListItem(id, todoListItemToUpdate);
+        TodoListItem todoListItemToUpdate = todoListItemMapper.toDomain(todoListItemInDto, id);
+        return todoListItemService.updateTodoListItem(todoListItemToUpdate);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public TodoListItem updatePartialTodoListItem(@PathVariable("id") Long id, @RequestBody TodoListItemInDto todoListItemInDto) {
-        return todoListItemService.updatePartialTodoListItem(id, todoListItemInDto);
+        TodoListItem todoListItemToUpdate = todoListItemMapper.toDomain(todoListItemInDto, id);
+        return todoListItemService.updatePartialTodoListItem(todoListItemToUpdate);
     }
 
     @DeleteMapping("/{id}")

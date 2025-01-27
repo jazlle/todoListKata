@@ -1,0 +1,23 @@
+<div class="todo-container">
+  <h1>Todo List</h1>
+
+  <div class="todo-form">
+    <input
+      type="text"
+      [(ngModel)]="newTodoLabel"
+      placeholder="New todolist item"
+    />
+    <button (click)="createTodo()">Add</button>
+  </div>
+
+  <ul class="todo-list">
+    <li *ngFor="let item of todoList">
+      <app-todolist-item
+        [todo]="item"
+        (updateLabel)="updateTodoLabel(item.id, $event)"
+        (toggleCompleted)="toggleCompleted(item.id, $event)"
+        (delete)="deleteTodoItem(item.id)"
+      />
+    </li>
+  </ul>
+</div>

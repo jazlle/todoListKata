@@ -1,11 +1,11 @@
 package org.kataolympp.model.domain;
 
 public class TodoListItem {
-    private Long id;
+    private final Long id;
     private String label;
-    private boolean completed;
+    private Boolean completed;
 
-    public TodoListItem(Long id, String label, boolean completed) {
+    public TodoListItem(Long id, String label, Boolean completed) {
         this.id = id;
         this.label = label;
         this.completed = completed;
@@ -13,10 +13,6 @@ public class TodoListItem {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getLabel() {
@@ -27,11 +23,11 @@ public class TodoListItem {
         this.label = label;
     }
 
-    public boolean isCompleted() {
+    public Boolean isCompleted() {
         return completed;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
 }

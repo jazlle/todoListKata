@@ -28,6 +28,22 @@ class TodoListItemMapperTest {
     }
 
     @Test
+    public void toDomainWithInDtoAndId() {
+        // GIVEN
+        Long id = 1L;
+        TodoListItemInDto dto = new TodoListItemInDto("Test Item", true);
+
+        // WHEN
+        TodoListItem result = mapper.toDomain(dto, id);
+
+        // THEN
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertEquals("Test Item", result.getLabel());
+        assertTrue(result.isCompleted());
+    }
+
+    @Test
     public void toOutDto() {
         // GIVEN
         TodoListItem item = new TodoListItem(1L, "Test Item", true);

@@ -2,6 +2,7 @@ package org.kataolympp.repository;
 
 import org.junit.jupiter.api.Test;
 import org.kataolympp.AbstractTodoListIntegrationTest;
+import org.kataolympp.exception.TodoListItemNotFoundException;
 import org.kataolympp.fixture.TodoListItemFixture;
 import org.kataolympp.model.domain.TodoListItem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -38,27 +39,26 @@ public class TodoListItemRepositoryTest extends AbstractTodoListIntegrationTest 
     @Test
     public void testFindAll() {
         // GIVEN
-        TodoListItem itemToSave = persistTodoListItem(TodoListItemFixture.aTodoListItemWithoutId());
+        TodoListItem item = persistTodoListItem(TodoListItemFixture.aTodoListItemWithoutId());
 
         // WHEN
         List<TodoListItem> allItems = repository.findAll();
 
         // THEN
         assertThat(allItems).isNotEmpty();
-        assertThat(allItems.get(0)).usingRecursiveComparison().isEqualTo(itemToSave);
+        assertThat(allItems.get(0)).usingRecursiveComparison().isEqualTo(item);
     }
 
     @Test
     public void testFindById() {
         // GIVEN
-        TodoListItem itemToSave = persistTodoListItem(TodoListItemFixture.aTodoListItemWithoutId());
+        TodoListItem item = persistTodoListItem(TodoListItemFixture.aTodoListItemWithoutId());
 
         // WHEN
-        Optional<TodoListItem> foundItem = repository.findById(itemToSave.getId());
+        TodoListItem foundItem = repository.findById(item.getId());
 
         // THEN
-        assertThat(foundItem).isPresent();
-        assertThat(foundItem.get()).usingRecursiveComparison().isEqualTo(itemToSave);
+        assertThat(foundItem).usingRecursiveComparison().isEqualTo(item);
     }
 
     @Test
@@ -67,23 +67,20 @@ public class TodoListItemRepositoryTest extends AbstractTodoListIntegrationTest 
         long nonExistingId = 999L;
 
         // WHEN
-        Optional<TodoListItem> foundItem = repository.findById(nonExistingId);
-
         // THEN
-        assertThat(foundItem).isNotPresent();
+        assertThrows(TodoListItemNotFoundException.class, () -> repository.findById(nonExistingId));
     }
 
     @Test
     public void testDeleteById() {
         // GIVEN
-        TodoListItem itemToSave = persistTodoListItem(TodoListItemFixture.aTodoListItemWithoutId());
+        TodoListItem item = persistTodoListItem(TodoListItemFixture.aTodoListItemWithoutId());
 
         // WHEN
-        repository.deleteById(itemToSave.getId());
+        repository.deleteById(item.getId());
 
         // THEN
-        Optional<TodoListItem> foundItem = repository.findById(itemToSave.getId());
-        assertThat(foundItem).isNotPresent();
+        assertThrows(TodoListItemNotFoundException.class, () -> repository.findById(item.getId()));
     }
 
     @Test

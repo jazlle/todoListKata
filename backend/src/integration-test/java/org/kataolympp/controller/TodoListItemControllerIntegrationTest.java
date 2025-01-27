@@ -31,13 +31,13 @@ public class TodoListItemControllerIntegrationTest extends AbstractTodoListInteg
     @Test
     public void testCreateTodoListItem() throws Exception {
         // GIVEN
-        String todoItemJson = "{\"label\": \"Test item\", \"completed\": false}";
+        String todoListItemJson = "{\"label\": \"Test item\", \"completed\": false}";
 
         // WHEN
         // THEN
         mockMvc.perform(post("/api/todolist-item")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(todoItemJson))
+                        .content(todoListItemJson))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.label").value("Test item"))
                 .andExpect(jsonPath("$.completed").value(false));
@@ -55,7 +55,25 @@ public class TodoListItemControllerIntegrationTest extends AbstractTodoListInteg
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].label").value("Test item 1"))
-                .andExpect(jsonPath("$[1].label").value("Test item 2"));
+                .andExpect(jsonPath("$[0].completed").value(false))
+                .andExpect(jsonPath("$[1].label").value("Test item 2"))
+                .andExpect(jsonPath("$[1].completed").value(true));
+    }
+
+    @Test
+    public void testGetTodoListItemsById() throws Exception {
+        // GIVEN
+        TodoListItem item = new TodoListItem(1L, "Test item 1", false);
+
+        persistTodoListItem(item);
+
+        // WHEN
+        // THEN
+        mockMvc.perform(get("/api/todolist-item/{id}", item.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.label").value("Test item 1"))
+                .andExpect(jsonPath("$.completed").value(false));
     }
 
     @Test

@@ -13,6 +13,10 @@ public class TodoListItemMapper {
         return new TodoListItem(null, dto.label(), dto.completed());
     }
 
+    public TodoListItem toDomain(TodoListItemInDto dto, Long id) {
+        return new TodoListItem(id, dto.label(), dto.completed());
+    }
+
     public TodoListItemOutDto toOutDto(TodoListItem item) {
         return new TodoListItemOutDto(item.getId(), item.getLabel(), item.isCompleted());
     }
