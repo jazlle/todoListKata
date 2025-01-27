@@ -16,9 +16,10 @@ public class TodoListItemServiceImpl implements TodoListItemService {
         this.todoListItemRepository = todoListItemRepository;
     }
 
-    public List<TodoListItem> getAllTodoListItems() {
-        return todoListItemRepository.findAll();
+    public List<TodoListItem> getAllTodoListItems(Boolean completed) {
+        return Optional.ofNullable(completed).isEmpty() ? todoListItemRepository.findAll() : todoListItemRepository.findAllByCompleted(completed);
     }
+
 
     public TodoListItem getTodoListItemById(Long id) {
         return todoListItemRepository.findById(id);

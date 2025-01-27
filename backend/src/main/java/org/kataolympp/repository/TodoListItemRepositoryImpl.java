@@ -44,6 +44,13 @@ public class TodoListItemRepositoryImpl implements TodoListItemRepository {
                 .map(mapper::toDomain);
     }
 
+    public List<TodoListItem> findAllByCompleted(Boolean completed) {
+        return dsl.selectFrom(TODOLISTITEM)
+                .where(TODOLISTITEM.COMPLETED.eq(completed))
+                .fetch()
+                .map(mapper::toDomain);
+    }
+
     public TodoListItem findById(long id) {
         return dsl.selectFrom(TODOLISTITEM)
                 .where(TODOLISTITEM.ID.eq(id))

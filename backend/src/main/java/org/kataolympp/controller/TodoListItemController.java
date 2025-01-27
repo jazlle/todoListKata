@@ -22,8 +22,8 @@ public class TodoListItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<TodoListItem> getAllTodoListItems() {
-        return todoListItemService.getAllTodoListItems();
+    public List<TodoListItem> getAllTodoListItems(@RequestParam(value = "completed", required = false) Boolean completed) {
+        return todoListItemService.getAllTodoListItems(completed);
     }
 
     @GetMapping("/{id}")

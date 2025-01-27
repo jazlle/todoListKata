@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class TodoListItemRepositoryTest extends AbstractTodoListIntegrationTest {
+public class TodoListItemRepositoryITest extends AbstractTodoListIntegrationTest {
 
     @Autowired
     private TodoListItemRepository repository;

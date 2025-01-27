@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.stream.Stream;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.kataolympp.generated.tables.Todolistitem.TODOLISTITEM;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class TodoListItemControllerIntegrationTest extends AbstractTodoListIntegrationTest {
+public class TodoListItemControllerITest extends AbstractTodoListIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,6 +59,22 @@ public class TodoListItemControllerIntegrationTest extends AbstractTodoListInteg
                 .andExpect(jsonPath("$[0].completed").value(false))
                 .andExpect(jsonPath("$[1].label").value("Test item 2"))
                 .andExpect(jsonPath("$[1].completed").value(true));
+    }
+
+    @Test
+    public void testGetAllByCompletedTodoListItems() throws Exception {
+        // GIVEN
+        persistTodoListItem(new TodoListItem(1L, "Test item 1", false));
+        persistTodoListItem(new TodoListItem(2L, "Test item 2", true));
+
+        // WHEN
+        // THEN
+        mockMvc.perform(get("/api/todolist-item?completed=false")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].label").value("Test item 1"))
+                .andExpect(jsonPath("$[0].completed").value(false));
     }
 
     @Test

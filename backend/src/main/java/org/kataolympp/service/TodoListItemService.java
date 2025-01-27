@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TodoListItemService {
 
-     List<TodoListItem> getAllTodoListItems();
+     List<TodoListItem> getAllTodoListItems(Boolean completed);
      TodoListItem getTodoListItemById(Long id);
      TodoListItem createTodoListItem(TodoListItem todoItem);
      TodoListItem updateTodoListItem(TodoListItem todoItem);
