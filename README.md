@@ -26,7 +26,12 @@ Les services Docker lancés par `docker-compose up` incluent les base de donnée
     ```bash
     mvn clean install
     ```
+4. Vous pouvez maintenant run l'application backend :
 
+    ```bash
+    mvn spring-boot:run
+    ```
+   
 ### Frontend
 
 1. Rendez-vous dans le répertoire `frontend` du projet.
