@@ -13,12 +13,12 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
-  # Base de données de test
+  # Test database
   postgres-db-test:
     image: postgres:17.2
     container_name: postgres-db-test
     ports:
-      - "5433:5432"  # Port local différent pour éviter les conflits
+      - "5433:5432"  # Different local port for testing db, to avoid port conflict with run db
     environment:
       POSTGRES_USER: kataolympp
       POSTGRES_PASSWORD: natixis

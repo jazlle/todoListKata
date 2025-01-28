@@ -2,6 +2,6 @@ package org.kataolympp.model.dto.in;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record TodoListItemInDto(@JsonProperty String label, @JsonProperty Boolean completed) {
+public record TaskInDto(@JsonProperty String label, @JsonProperty Boolean completed) {
 }
 

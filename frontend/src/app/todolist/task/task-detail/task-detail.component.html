@@ -1,0 +1,12 @@
+<div class="task-detail">
+  <button class="back" (click)="back()">Back</button>
+  <h2>Edit Task</h2>
+  <input
+    class="task-label"
+    type="text"
+    [(ngModel)]="task.label"
+    placeholder="Update label"
+    (keydown.enter)="save()"
+  />
+  <button class="save" (click)="save()">Save</button>
+</div>

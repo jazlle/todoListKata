@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
-import { TodoService, TodoListItem, TodoListItemInDto } from './todolist.service';
-import {TodoListItemComponent} from './todolist-item/todolist-item.component';
+import { TodoService, Task, TaskInDto } from './todolist.service';
+import {TaskComponent} from './task/task.component';
 import {FormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 
@@ -9,47 +9,46 @@ import {CommonModule} from '@angular/common';
   templateUrl: './todolist.component.html',
   styleUrls: ['./todolist.component.css'],
   imports: [
-    TodoListItemComponent,
+    TaskComponent,
     FormsModule,
     CommonModule
   ],
 })
 export class TodoListComponent implements OnInit {
-  todoService = inject(TodoService)
-  todoList: TodoListItem[] = [];
-  newTodoLabel = '';
-
-  constructor() {}
+  todoService = inject(TodoService);
+  todoList: Task[] = [];
+  newTaskLabel = '';
+  filterCompleted: boolean | 'all' = 'all';
 
   ngOnInit(): void {
     this.loadTodoList();
   }
 
   loadTodoList(): void {
-    this.todoService.getAllTodoListItems().subscribe((items) => (this.todoList = items));
+    this.todoService.getAllTasks(this.filterCompleted).subscribe((tasks) => (this.todoList = tasks));
   }
 
   createTodo(): void {
-    if (this.newTodoLabel.trim()) {
-      const newItem: TodoListItemInDto = { label: this.newTodoLabel, completed: false };
-      this.todoService.createTodoListItem(newItem).subscribe(() => {
-        this.newTodoLabel = '';
+    if (this.newTaskLabel.trim()) {
+      const newItem: TaskInDto = { label: this.newTaskLabel, completed: false };
+      this.todoService.createTask(newItem).subscribe(() => {
+        this.newTaskLabel = '';
         this.loadTodoList();
       });
     }
   }
 
-  updateTodoLabel(id: number, label: string): void {
-    const updateItem: TodoListItemInDto = { label };
-    this.todoService.updateTodoListItem(id, updateItem).subscribe(() => this.loadTodoList());
-  }
-
   toggleCompleted(id: number, completed: boolean): void {
-    const updateItem: TodoListItemInDto = { completed };
-    this.todoService.updatePartialTodoListItem(id, updateItem).subscribe(() => this.loadTodoList());
+    const updateItem: TaskInDto = { completed };
+    this.todoService.updatePartialTask(id, updateItem).subscribe(() => this.loadTodoList());
   }
 
   deleteTodoItem(id: number): void {
-    this.todoService.deleteTodoListItem(id).subscribe(() => this.loadTodoList());
+    this.todoService.deleteTask(id).subscribe(() => this.loadTodoList());
+  }
+
+  onFilterChange(filter: boolean | 'all'): void {
+    this.filterCompleted = filter;
+    this.loadTodoList();
   }
 }

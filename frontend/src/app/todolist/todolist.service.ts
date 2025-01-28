@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface TodoListItem {
+export interface Task {
   id: number;
-  label: string;
-  completed: boolean;
+  label?: string;
+  completed?: boolean;
 }
 
-export interface TodoListItemInDto {
+export interface TaskInDto {
   label?: string;
   completed?: boolean;
 }
@@ -17,27 +17,33 @@ export interface TodoListItemInDto {
   providedIn: 'root',
 })
 export class TodoService {
-  private apiUrl = '/api/todolist-item';
+  private apiUrl = '/api/task';
 
   constructor(private http: HttpClient) {}
 
-  getAllTodoListItems(): Observable<TodoListItem[]> {
-    return this.http.get<TodoListItem[]>(this.apiUrl);
+  getAllTasks(completed: boolean | 'all'): Observable<Task[]> {
+    let params = new HttpParams();
+    if (completed !== 'all') {
+      params = params.set('completed', completed);
+      return this.http.get<Task[]>(this.apiUrl, { params });
+    }
+
+    return this.http.get<Task[]>(this.apiUrl);
   }
 
-  createTodoListItem(item: TodoListItemInDto): Observable<TodoListItem> {
-    return this.http.post<TodoListItem>(this.apiUrl, item);
+  getTaskById(id: number): Observable<Task> {
+    return this.http.get<Task>(`${this.apiUrl}/${id}`);
   }
 
-  updateTodoListItem(id: number, item: TodoListItemInDto): Observable<TodoListItem> {
-    return this.http.put<TodoListItem>(`${this.apiUrl}/${id}`, item);
+  createTask(task: TaskInDto): Observable<Task> {
+    return this.http.post<Task>(this.apiUrl, task);
   }
 
-  updatePartialTodoListItem(id: number, item: TodoListItemInDto): Observable<TodoListItem> {
-    return this.http.patch<TodoListItem>(`${this.apiUrl}/${id}`, item);
+  updatePartialTask(id: number, task: TaskInDto): Observable<Task> {
+    return this.http.patch<Task>(`${this.apiUrl}/${id}`, task);
   }
 
-  deleteTodoListItem(id: number): Observable<void> {
+  deleteTask(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

@@ -1,11 +1,11 @@
 package org.kataolympp.model.domain;
 
-public class TodoListItem {
+public class Task {
     private final Long id;
     private String label;
     private Boolean completed;
 
-    public TodoListItem(Long id, String label, Boolean completed) {
+    public Task(Long id, String label, Boolean completed) {
         this.id = id;
         this.label = label;
         this.completed = completed;

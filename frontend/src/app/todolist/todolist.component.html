@@ -4,20 +4,30 @@
   <div class="todo-form">
     <input
       type="text"
-      [(ngModel)]="newTodoLabel"
-      placeholder="New todolist item"
+      [(ngModel)]="newTaskLabel"
+      placeholder="New Task"
+      (keydown.enter)="createTodo()"
     />
     <button (click)="createTodo()">Add</button>
   </div>
 
+  <div class="todo-filter">
+    <label for="filter">Filter:</label>
+    <select id="filter" [(ngModel)]="filterCompleted" (change)="onFilterChange(filterCompleted)">
+      <option value="all">All</option>
+      <option value=true>Completed</option>
+      <option value=false>Not Completed</option>
+    </select>
+  </div>
+
+
   <ul class="todo-list">
-    <li *ngFor="let item of todoList">
-      <app-todolist-item
-        [todo]="item"
-        (updateLabel)="updateTodoLabel(item.id, $event)"
-        (toggleCompleted)="toggleCompleted(item.id, $event)"
-        (delete)="deleteTodoItem(item.id)"
-      />
+    <li *ngFor="let task of todoList">
+      <app-task
+        [task]="task"
+        (toggleCompleted)="toggleCompleted(task.id, $event)"
+        (delete)="deleteTodoItem(task.id)"
+      ></app-task>
     </li>
   </ul>
 </div>

@@ -1,24 +1,24 @@
 package org.kataolympp.mapper;
 
 import org.junit.jupiter.api.Test;
-import org.kataolympp.generated.tables.records.TodolistitemRecord;
-import org.kataolympp.model.domain.TodoListItem;
-import org.kataolympp.model.dto.in.TodoListItemInDto;
-import org.kataolympp.model.dto.out.TodoListItemOutDto;
+import org.kataolympp.generated.tables.records.TaskRecord;
+import org.kataolympp.model.domain.Task;
+import org.kataolympp.model.dto.in.TaskInDto;
+import org.kataolympp.model.dto.out.TaskOutDto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TodoListItemMapperTest {
+class TaskMapperTest {
 
-    private final TodoListItemMapper mapper = new TodoListItemMapper();
+    private final TaskMapper mapper = new TaskMapper();
 
     @Test
     public void toDomainWithInDto() {
         // GIVEN
-        TodoListItemInDto dto = new TodoListItemInDto("Test Item", true);
+        TaskInDto dto = new TaskInDto("Test Item", true);
 
         // WHEN
-        TodoListItem result = mapper.toDomain(dto);
+        Task result = mapper.toDomain(dto);
 
         // THEN
         assertNotNull(result);
@@ -31,10 +31,10 @@ class TodoListItemMapperTest {
     public void toDomainWithInDtoAndId() {
         // GIVEN
         Long id = 1L;
-        TodoListItemInDto dto = new TodoListItemInDto("Test Item", true);
+        TaskInDto dto = new TaskInDto("Test Item", true);
 
         // WHEN
-        TodoListItem result = mapper.toDomain(dto, id);
+        Task result = mapper.toDomain(dto, id);
 
         // THEN
         assertNotNull(result);
@@ -46,10 +46,10 @@ class TodoListItemMapperTest {
     @Test
     public void toOutDto() {
         // GIVEN
-        TodoListItem item = new TodoListItem(1L, "Test Item", true);
+        Task item = new Task(1L, "Test Item", true);
 
         // WHEN
-        TodoListItemOutDto result = mapper.toOutDto(item);
+        TaskOutDto result = mapper.toOutDto(item);
 
         // THEN
         assertNotNull(result);
@@ -61,10 +61,10 @@ class TodoListItemMapperTest {
     @Test
     public void toRecord() {
         // GIVEN
-        TodoListItem item = new TodoListItem(1L, "Test Item", true);
+        Task item = new Task(1L, "Test Item", true);
 
         // WHEN
-        TodolistitemRecord result = mapper.toRecord(item);
+        TaskRecord result = mapper.toRecord(item);
 
         // THEN
         assertNotNull(result);
@@ -76,10 +76,10 @@ class TodoListItemMapperTest {
     @Test
     public void toDomainWithRecord() {
         // GIVEN
-        TodolistitemRecord record = new TodolistitemRecord(1L, "Test Item", true);
+        TaskRecord record = new TaskRecord(1L, "Test Item", true);
 
         // WHEN
-        TodoListItem result = mapper.toDomain(record);
+        Task result = mapper.toDomain(record);
 
         // THEN
         assertNotNull(result);
