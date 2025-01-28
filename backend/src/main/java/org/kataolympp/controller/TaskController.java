@@ -1,5 +1,6 @@
 package org.kataolympp.controller;
 
+import jakarta.validation.Valid;
 import org.kataolympp.mapper.TaskMapper;
 import org.kataolympp.model.domain.Task;
 import org.kataolympp.model.dto.in.TaskInDto;
@@ -32,7 +33,7 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Task createTodoListItem(@RequestBody TaskInDto taskInDto) {
+    public Task createTodoListItem(@RequestBody @Valid TaskInDto taskInDto) {
         Task taskToCreate = taskMapper.toDomain(taskInDto);
         return taskService.createTodoListItem(taskToCreate);
     }

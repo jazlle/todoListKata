@@ -1,25 +1,14 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Task {
-  id: number;
-  label?: string;
-  completed?: boolean;
-}
-
-export interface TaskInDto {
-  label?: string;
-  completed?: boolean;
-}
+import {Task, TaskInDto} from './task.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TodoService {
+export class TaskService {
   private apiUrl = '/api/task';
-
-  constructor(private http: HttpClient) {}
+  http= inject(HttpClient);
 
   getAllTasks(completed: boolean | 'all'): Observable<Task[]> {
     let params = new HttpParams();

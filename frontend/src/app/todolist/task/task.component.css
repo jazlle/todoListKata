@@ -11,11 +11,15 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  overflow: hidden;
+  width: 100%;
 }
 
 .todo-item input[type="checkbox"] {
   width: 20px;
   height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   margin-right: 10px;
   cursor: pointer;
 }

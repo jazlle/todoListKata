@@ -6,9 +6,9 @@
       type="text"
       [(ngModel)]="newTaskLabel"
       placeholder="New Task"
-      (keydown.enter)="createTodo()"
+      (keydown.enter)="createTask()"
     />
-    <button (click)="createTodo()">Add</button>
+    <button (click)="createTask()">Add</button>
   </div>
 
   <div class="todo-filter">
@@ -26,7 +26,7 @@
       <app-task
         [task]="task"
         (toggleCompleted)="toggleCompleted(task.id, $event)"
-        (delete)="deleteTodoItem(task.id)"
+        (delete)="deleteTask(task.id)"
       ></app-task>
     </li>
   </ul>

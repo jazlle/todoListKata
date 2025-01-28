@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter, inject} from '@angular/core';
-import { Task } from '../todolist.service';
+import {Task} from './task.model';
 import {Router} from '@angular/router';
 
 @Component({

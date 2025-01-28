@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TaskComponent } from './task.component';
 import { Router } from '@angular/router';
-import { Task } from '../todolist.service';
+import {Task} from './task.model';
 import { By } from '@angular/platform-browser';
 
 describe('TaskComponent', () => {

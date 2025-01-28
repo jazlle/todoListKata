@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TodoListComponent } from './todolist.component';
-import { TodoService } from './todolist.service';
+import { TaskService } from './task/task.service';
 import { TaskComponent } from './task/task.component';
 import { of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 
 describe('TodoListComponent', () => {
   let component: TodoListComponent;
   let fixture: ComponentFixture<TodoListComponent>;
-  let todoServiceSpy: jasmine.SpyObj<TodoService>;
+  let taskServiceSpy: jasmine.SpyObj<TaskService>;
+  let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
 
   beforeEach(async () => {
     const spy = jasmine.createSpyObj('TodoService', [
@@ -20,12 +22,24 @@ describe('TodoListComponent', () => {
 
     spy.getAllTasks.and.returnValue(of([]));
 
+    const activatedRouteMock = {
+      snapshot: {
+        data: {
+          tasks: [
+            { id: 1, label: 'Task 1', completed: true },
+            { id: 2, label: 'Task 2', completed: false }
+          ]
+        }
+      }
+    };
+
     await TestBed.configureTestingModule({
       imports: [TaskComponent, FormsModule, TodoListComponent],
-      providers: [{ provide: TodoService, useValue: spy }],
+      providers: [{ provide: TaskService, useValue: spy } , {provide: ActivatedRoute, useValue: activatedRouteMock}],
     }).compileComponents();
 
-    todoServiceSpy = TestBed.inject(TodoService) as jasmine.SpyObj<TodoService>;
+    taskServiceSpy = TestBed.inject(TaskService) as jasmine.SpyObj<TaskService>;
+    activatedRouteSpy = TestBed.inject(ActivatedRoute) as jasmine.SpyObj<ActivatedRoute>;
   });
 
   beforeEach(() => {
@@ -39,28 +53,27 @@ describe('TodoListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call loadTodoList on ngOnInit', () => {
-    // GIVEN
-    spyOn(component, 'loadTodoList');
-    // WHEN
-    component.ngOnInit();
+  it('should init data with resolver', () => {
     // THEN
-    expect(component.loadTodoList).toHaveBeenCalled();
+    expect(component.todoList).toEqual([
+      { id: 1, label: 'Task 1', completed: true },
+      { id: 2, label: 'Task 2', completed: false }
+    ]);
   });
 
   it('should load the task list when filterCompleted is set', () => {
     // GIVEN
     const mockTasks = [
       { id: 1, label: 'Task 1', completed: true },
-      { id: 2, label: 'Task 2', completed: false }
+      { id: 2, label: 'Task 2', completed: true }
     ];
-    todoServiceSpy.getAllTasks.and.returnValue(of(mockTasks));
+    taskServiceSpy.getAllTasks.and.returnValue(of(mockTasks));
 
     // WHEN
     component.filterCompleted = true;
     component.loadTodoList();
     // THEN
-    expect(todoServiceSpy.getAllTasks).toHaveBeenCalledWith(true);
+    expect(taskServiceSpy.getAllTasks).toHaveBeenCalledWith(true);
     expect(component.todoList).toEqual(mockTasks);
   });
 
@@ -69,13 +82,13 @@ describe('TodoListComponent', () => {
     const newTaskLabel = 'New Task';
     component.newTaskLabel = newTaskLabel;
 
-    todoServiceSpy.createTask.and.returnValue(of({ id: 1, label: newTaskLabel, completed: false}));
+    taskServiceSpy.createTask.and.returnValue(of({ id: 1, label: newTaskLabel, completed: false}));
     spyOn(component, 'loadTodoList');
 
     // WHEN
-    component.createTodo();
+    component.createTask();
     // THEN
-    expect(todoServiceSpy.createTask).toHaveBeenCalledWith({ label: newTaskLabel, completed: false });
+    expect(taskServiceSpy.createTask).toHaveBeenCalledWith({ label: newTaskLabel, completed: false });
     expect(component.loadTodoList).toHaveBeenCalled();
     expect(component.newTaskLabel).toBe('');
   });
@@ -86,26 +99,26 @@ describe('TodoListComponent', () => {
     const completedStatus = true;
     const updateItem = { completed: completedStatus };
 
-    todoServiceSpy.updatePartialTask.and.returnValue(of({id: taskId, completed: completedStatus}));
+    taskServiceSpy.updatePartialTask.and.returnValue(of({id: taskId, completed: completedStatus}));
     spyOn(component, 'loadTodoList');
 
     // WHEN
     component.toggleCompleted(taskId, completedStatus);
     // THEN
-    expect(todoServiceSpy.updatePartialTask).toHaveBeenCalledWith(taskId, updateItem);
+    expect(taskServiceSpy.updatePartialTask).toHaveBeenCalledWith(taskId, updateItem);
     expect(component.loadTodoList).toHaveBeenCalled();
   });
 
   it('should delete a task and reload the task list', () => {
     // GIVEN
     const taskId = 1;
-    todoServiceSpy.deleteTask.and.returnValue(of(undefined));
+    taskServiceSpy.deleteTask.and.returnValue(of(undefined));
     spyOn(component, 'loadTodoList');
 
     // WHEN
-    component.deleteTodoItem(taskId);
+    component.deleteTask(taskId);
     // THEN
-    expect(todoServiceSpy.deleteTask).toHaveBeenCalledWith(taskId);
+    expect(taskServiceSpy.deleteTask).toHaveBeenCalledWith(taskId);
     expect(component.loadTodoList).toHaveBeenCalled();
   });
 

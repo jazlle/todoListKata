@@ -2,7 +2,6 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Arial', sans-serif;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -30,7 +29,6 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   outline: none;
-  transition: border-color 0.3s ease;
 }
 
 .todo-form input[type="text"]:focus {
@@ -46,7 +44,6 @@
   cursor: pointer;
   font-size: 16px;
   margin-left: 10px;
-  transition: background-color 0.3s ease;
 }
 
 .todo-form button:hover {
@@ -84,7 +81,6 @@
   outline: none;
   background-color: white;
   cursor: pointer;
-  transition: border-color 0.3s ease;
   width: 150px;
 }
 

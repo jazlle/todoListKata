@@ -45,6 +45,32 @@ public class TaskControllerITest extends AbstractTaskIntegrationTest {
     }
 
     @Test
+    public void testCreateTaskLabelNotValid() throws Exception {
+        // GIVEN
+        String taskJson = "{\"label\": \"\", \"completed\": false}";
+
+        // WHEN
+        // THEN
+        mockMvc.perform(post("/api/task")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(taskJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testCreateTaskCompletedNotValid() throws Exception {
+        // GIVEN
+        String taskJson = "{\"label\": \"Test task\"}";
+
+        // WHEN
+        // THEN
+        mockMvc.perform(post("/api/task")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(taskJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void testGetAllTasks() throws Exception {
         // GIVEN
         persistTask(new Task(1L, "Test task 1", false));
@@ -157,12 +183,12 @@ public class TaskControllerITest extends AbstractTaskIntegrationTest {
     private static Stream<Arguments> updatePartialTaskParameters() {
         return Stream.of(
                 Arguments.of(
-                        "{\"label\": null, \"completed\": true}",
+                        "{\"completed\": true}",
                         new Task(1L, "Initial Label", true),
                         1L
                 ),
                 Arguments.of(
-                        "{\"label\": \"test persist\", \"completed\": null}",
+                        "{\"label\": \"test persist\"}",
                         new Task(1L, "test persist", false),
                         1L
                 )

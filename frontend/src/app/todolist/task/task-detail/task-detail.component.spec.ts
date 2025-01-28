@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TaskDetailComponent } from './task-detail.component';
-import { TodoService } from '../../todolist.service';
+import { TaskService } from '../task.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +9,7 @@ import { By } from '@angular/platform-browser';
 describe('TaskDetailComponent', () => {
   let component: TaskDetailComponent;
   let fixture: ComponentFixture<TaskDetailComponent>;
-  let todoServiceSpy: jasmine.SpyObj<TodoService>;
+  let todoServiceSpy: jasmine.SpyObj<TaskService>;
   let routerSpy: jasmine.SpyObj<Router>;
   let activatedRouteSpy: jasmine.SpyObj<ActivatedRoute>;
 
@@ -27,13 +27,13 @@ describe('TaskDetailComponent', () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule, TaskDetailComponent],
       providers: [
-        { provide: TodoService, useValue: todoServiceMock },
+        { provide: TaskService, useValue: todoServiceMock },
         { provide: Router, useValue: routerMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
       ],
     }).compileComponents();
 
-    todoServiceSpy = TestBed.inject(TodoService) as jasmine.SpyObj<TodoService>;
+    todoServiceSpy = TestBed.inject(TaskService) as jasmine.SpyObj<TaskService>;
     routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
     activatedRouteSpy = TestBed.inject(ActivatedRoute) as jasmine.SpyObj<ActivatedRoute>;
   });
@@ -42,9 +42,7 @@ describe('TaskDetailComponent', () => {
     fixture = TestBed.createComponent(TaskDetailComponent);
     component = fixture.componentInstance;
 
-    todoServiceSpy.getTaskById.and.returnValue(
-      of({ id: 1, label: 'Mock Task', completed: false })
-    );
+    activatedRouteSpy.snapshot.data = { task: { id: 1, label: 'Mock Task', completed: false } };
 
     fixture.detectChanges();
   });
@@ -54,9 +52,8 @@ describe('TaskDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load the task on initialization', () => {
+  it('should init data with resolver', () => {
     // THEN
-    expect(todoServiceSpy.getTaskById).toHaveBeenCalledWith(1);
     expect(component.task).toEqual({ id: 1, label: 'Mock Task', completed: false });
   });
 
